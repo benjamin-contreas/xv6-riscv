@@ -60,3 +60,5 @@ $ echo "Hola xv6"
 $ cat README</code></pre>
     </li>
 </ul>
+<h2>Evidencia de que el proceso se realizó con éxito</h2>
+<img src="Tarea0_SO.png" alt="Una foto">
