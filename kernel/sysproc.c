@@ -107,7 +107,6 @@ sys_getancestor(void) {
   if (n < 0 ) {
     return -1;
   }
-
   p = myproc();
 
   for(int i=0; i < n; i++){
@@ -116,7 +115,5 @@ sys_getancestor(void) {
     }
     p = p->parent;
   }
-
   return p->pid;
-
 }
