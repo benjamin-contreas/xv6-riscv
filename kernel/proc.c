@@ -125,6 +125,10 @@ found:
   p->pid = allocpid();
   p->state = USED;
 
+  // Inicializar los campos priority y boost
+  p->priority = 0; // Inicializar en prioridad 0
+  p->boost = 1; // Inicializar boost en 1
+
   // Allocate a trapframe page.
   if((p->trapframe = (struct trapframe *)kalloc()) == 0){
     freeproc(p);
@@ -458,6 +462,21 @@ scheduler(void)
     for(p = proc; p < &proc[NPROC]; p++) {
       acquire(&p->lock);
       if(p->state == RUNNABLE) {
+        // Incrementar la prioridad de todos los procesos ejecutables
+        for(struct proc *q = proc; q < &proc[NPROC]; q++) {
+          if (q->state == RUNNABLE){
+            q->priority += q->boost;
+            if (q->priority >= 9) {
+              q->priority = 9;
+              q->boost = -1;
+            }
+            else if (q->priority <= 0) {
+              q->priority = 0;
+              q->boost = 1;
+            }
+          }
+        }
+
         // Switch to chosen process.  It is the process's job
         // to release its lock and then reacquire it
         // before jumping back to us.
