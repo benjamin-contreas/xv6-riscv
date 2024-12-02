@@ -108,8 +108,8 @@ fileread(struct file *f, uint64 addr, int n)
 {
   int r = 0;
 
-  if(f->readable == 0)
-    return -1;
+  if(f->readable == 0 || !(f->ip->perm & 1))
+    return -1; // No tiene permiso de lectura
 
   if(f->type == FD_PIPE){
     r = piperead(f->pipe, addr, n);
@@ -136,8 +136,8 @@ filewrite(struct file *f, uint64 addr, int n)
 {
   int r, ret = 0;
 
-  if(f->writable == 0)
-    return -1;
+  if(f->writable == 0 || !(f->ip->perm & 2))
+    return -1; // No tiene permiso de escritura 
 
   if(f->type == FD_PIPE){
     ret = pipewrite(f->pipe, addr, n);
